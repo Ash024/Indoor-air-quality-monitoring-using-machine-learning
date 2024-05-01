@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IAQM</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: url('https://media.istockphoto.com/id/1006507940/photo/looking-up-view-of-panoramic-modern-city-skyline-with-blue-sky-and-green-tree-in-shinjuku.jpg?s=612x612&w=0&k=20&c=jMKwHoLVMIcA-yP609gGWKM9mr7f57QfOJuXnr6RbVM=');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            color: #fff; /* Default text color */
+        }
+        
+        h2 {
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        form {
+            max-width: 400px;
+            margin: 20px auto;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        input[type="text"] {
+            width: calc(100% - 12px);
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        
+        button[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+        
+        .prediction {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .predicted-value {
+            font-size: 24px;
+            font-weight: bold;
+            padding: 10px 20px; /* Add padding to create space around the text */
+            background-color: rgba(255, 255, 255, 0.7); /* Semi-transparent background */
+            border-radius: 5px; /* Rounded corners */
+            display: inline-block; /* Ensure the background covers only the text */
+        }
+       
+
+        /* Color variations for predicted value */
+        .good {
+            color: green;
+        }
+
+        .satisfactory {
+            color: yellow;
+        }
+
+        .moderately_polluted {
+            color: orange;
+        }
+
+        .poor {
+            color: red;
+        }
+
+        .very_poor {
+            color: purple;
+        }
+    </style>
+</head>
+<body>
+    <h2>AQI Prediction</h2>
+    
+    <form action="{{ url_for('predict')}}" method="post">
+        <input type="text" name="PM2.5" placeholder="PM2.5" required="required" /> <br>
+        <input type="text" name="PM10" placeholder="PM10" required="required" /> <br>
+        <input type="text" name="NO" placeholder="NO" required="required" /> <br>
+        <input type="text" name="NO2" placeholder="NO2" required="required" /> <br>
+        <input type="text" name="NOx" placeholder="NOx" required="required" /> <br>
+        <input type="text" name="NH3" placeholder="NH3" required="required" /> <br>
+        <input type="text" name="SO2" placeholder="SO2" required="required" />  <br>
+        <input type="text" name="CO" placeholder="CO" required="required" /> <br>
+        <input type="text" name="Ozone" placeholder="Ozone" required="required" /> <br>
+        <button type="submit" class="btn btn-primary btn-block btn-large">Predict</button>
+    </form>
+
+    <div class="prediction">
+        <h2>The quality of indoor air is </h2>
+        <h2 class="predicted-value">{{ prediction_text }}</h2>
+    </div>
+
+    <script>
+        // Get the predicted value element
+        var predictedValue = document.querySelector('.predicted-value');
+        
+        // Get the text content of the predicted value
+        var predictionText = predictedValue.textContent;
+        
+        // Extract the string between the brackets
+        var predictionString = predictionText.substring(2, predictionText.length - 2);
+        
+        // Update the text content of the predicted value element
+        predictedValue.textContent = predictionString;
+
+
+        // Change color based on the value range
+        if (predictionString == 'Good') {
+            predictedValue.classList.add('good');
+        } else if (predictionString == 'Satisfactory') {
+            predictedValue.classList.add('satisfactory');
+        } else if (predictionString == 'Moderately Polluted') {
+            predictedValue.classList.add('moderately_polluted');
+        } else if (predictionString == 'Poor') {
+            predictedValue.classList.add('poor');
+        } else{
+            predictedValue.classList.add('very_poor');
+        }    
+
+    </script>
+</body>
+</html>
